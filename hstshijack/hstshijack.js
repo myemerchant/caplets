@@ -121,6 +121,9 @@ function configure() {
 			log_fatal("(" + green + "hstshijack" + reset + ") Could not read a path in hstshijack.custompayloads (got " + custom_payload_path + ").")
 		}
 	}
+	if (obfuscation == "false") {
+		obfuscation = false
+	}
 
 	// Read & prepare core payload.
 	resetPayload()
@@ -153,6 +156,7 @@ function showModule() {
 	logStr += "    " + yellow + "       hstshijack.targets" + reset + " > " + ( env("hstshijack.targets") ? green + env("hstshijack.targets") : red + "undefined" ) + reset + "\n"
 	logStr += "    " + yellow + "  hstshijack.replacements" + reset + " > " + ( env("hstshijack.replacements") ? green + env("hstshijack.replacements") : red + "undefined" ) + reset + "\n"
 	logStr += "    " + yellow + "  hstshijack.blockscripts" + reset + " > " + ( env("hstshijack.blockscripts") ? green + env("hstshijack.blockscripts") : red + "undefined" ) + reset + "\n"
+	logStr += "    " + yellow + "     hstshijack.obfuscate" + reset + " > " + ( obfuscation ? green + "true" : red + "false" ) + reset + "\n"
 	logStr += "    " + yellow + "hstshijack.custompayloads" + reset + " > "
 	if ( env("hstshijack.custompayloads") ) {
 			custom_payloads = env("hstshijack.custompayloads").replace(/\s/g, "").split(",")
