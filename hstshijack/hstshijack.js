@@ -321,7 +321,7 @@ function onRequest(req, res) {
 			// Patch spoofed hostnames.
 			for (var a = 0; a < target_hosts.length; a++) {
 				// Patch spoofed hostnames in headers.
-				regexp  = new RegExp( "(.*?)" + replacement_hosts[a].replace(/\./g, "\\.").replace(/\-/g, "\\-").replace("*", "") + "(.*?)", "ig" )
+				regexp = new RegExp( "(.*?)" + replacement_hosts[a].replace(/\./g, "\\.").replace(/\-/g, "\\-").replace("*", "") + "([^\.a-z]*)", "igm" )
 				if ( req.Headers.match(regexp) ) {
 					matches = req.Headers.match(regexp)
 					for (var b = 0; b < matches.length; b++) {
@@ -346,7 +346,7 @@ function onRequest(req, res) {
 
 			// Patch SSL in headers if we know host uses SSL.
 			for (var a = 0; a < ssl_log.length; a++) {
-				regexp      = new RegExp( "(.*?)http:\/\/" + ssl_log[a].replace(/\./g, "\\.").replace(/\-/g, "\\-") + "(.*?)", "ig" )
+				regexp = new RegExp( "(.*?)http:\/\/" + ssl_log[a].replace(/\./g, "\\.").replace(/\-/g, "\\-") + "([^\.a-z]*)", "igm" )
 				if ( req.Headers.match(regexp) ) {
 					matches = req.Headers.match(regexp)
 					for (var b = 0; b < matches.length; b++) {
@@ -533,7 +533,7 @@ function onResponse(req, res) {
 
 		// Replace hosts in headers.
 		for (var a = 0; a < target_hosts.length; a++) {
-			regexp  = new RegExp( "(.*?)" + target_hosts[a].replace(/\./g, "\\.").replace(/\-/g, "\\-").replace("*", "") + "(.*?)", "ig" )
+			regexp  = new RegExp( "(.*?)" + target_hosts[a].replace(/\./g, "\\.").replace(/\-/g, "\\-").replace("*", "") + "([^\.a-z]*)", "igm" )
 			if ( res.Headers.match(regexp) ) {
 				matches = res.Headers.match(regexp)
 				for (var b = 0; b < matches.length; b++) {
